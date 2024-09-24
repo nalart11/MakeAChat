@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/MakeAChat.main.iml" filepath="$PROJECT_DIR$/.idea/modules/MakeAChat.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/MakeAChat.test.iml" filepath="$PROJECT_DIR$/.idea/modules/MakeAChat.test.iml" />
     </modules>
   </component>
 </project>
