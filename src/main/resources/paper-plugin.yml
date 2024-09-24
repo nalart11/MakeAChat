@@ -1,0 +1,4 @@
+name: MakeAChat
+version: '0.1-TEST'
+main: org.Chat.makeAChat.MakeAChat
+api-version: '1.21'
