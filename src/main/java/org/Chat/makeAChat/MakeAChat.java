@@ -57,11 +57,28 @@ public class MakeAChat extends JavaPlugin implements Listener {
         String playerName = player.getDisplayName();
         String message = event.getMessage();
 
+        // Проверяем, есть ли в сообщении маркер ":loc:"
+        if (message.contains(":loc:")) {
+            // Получаем координаты игрока
+            int x = player.getLocation().getBlockX();
+            int y = player.getLocation().getBlockY();
+            int z = player.getLocation().getBlockZ();
+
+            // Получаем название мира
+            String worldName = player.getWorld().getName();
+
+            // Форматируем строку с координатами и измерением
+            String location = "[" + x + "/" + y + "/" + z + ", " + worldName + "]";
+
+            // Заменяем ":loc:" на координаты игрока
+            message = message.replace(":loc:", location);
+        }
+
         // Получаем префикс и суффикс игрока
         String prefix = getPlayerPrefix(player);
         String suffix = getPlayerSuffix(player);
 
-        // Форматируем сообщение, включая префикс и суффикс
+        // Форматируем сообщение, включая префикс, суффикс и текст игрока
         String formattedMessage = prefix + playerName + suffix + " > " + message;
 
         // Парсим MiniMessage в Component

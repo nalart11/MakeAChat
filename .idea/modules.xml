@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/MakeAChat.main.iml" filepath="$PROJECT_DIR$/.idea/modules/MakeAChat.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/MakeAChat.test.iml" filepath="$PROJECT_DIR$/.idea/modules/MakeAChat.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/org.Chat.MakeAChat.main.iml" filepath="$PROJECT_DIR$/.idea/modules/org.Chat.MakeAChat.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/org.Chat.MakeAChat.test.iml" filepath="$PROJECT_DIR$/.idea/modules/org.Chat.MakeAChat.test.iml" />
     </modules>
   </component>
 </project>
