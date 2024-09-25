@@ -1,11 +1,14 @@
     package org.Chat.makeAChat;
 
+    import org.Chat.makeAChat.TeleportCommand;
+
     import net.kyori.adventure.text.Component;
     import net.kyori.adventure.text.minimessage.MiniMessage;
     import org.bukkit.entity.Player;
     import org.bukkit.event.EventHandler;
     import org.bukkit.event.Listener;
     import org.bukkit.event.player.AsyncPlayerChatEvent;
+    import net.kyori.adventure.text.event.ClickEvent;
     import org.bukkit.plugin.java.JavaPlugin;
     import net.luckperms.api.LuckPermsProvider;
     import net.luckperms.api.model.user.User;
@@ -16,8 +19,9 @@
 
         @Override
         public void onEnable() {
-            // Регистрируем событие чата
+              // Регистрируем событие чата
             getServer().getPluginManager().registerEvents(this, this);
+            this.getCommand("goto").setExecutor(new TeleportCommand(this));
             getLogger().info("MakeAChat плагин активирован!");
         }
 
@@ -77,16 +81,17 @@
                         color = "<red>";
                         break;
                     case "world_the_end":
-                        color = "<purple>";
+                        color = "<light_purple>";
                         break;
                     default:
                         color = "<white>"; // Цвет по умолчанию
                 }
 
                 // Форматируем строку с координатами и измерением
-                String location = color + "[" + x + "/" + y + "/" + z + ", " + worldName + "]" + "<reset>";
+                String location = color + "<click:run_command:'/goto " + worldName + " " + x + " " + y + " " + z + "'>["
+                        + x + "x/" + y + "y/" + z + "z, " + worldName + "]</click><reset>";
 
-                // Заменяем ":loc:" на координаты игрока
+                // Заменяем ":loc:" на кликабельный текст с координатами игрока
                 message = message.replace(":loc:", location);
             }
 
