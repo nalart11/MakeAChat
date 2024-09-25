@@ -29,12 +29,12 @@ public class TeleportCommand implements CommandExecutor {
                     y = Integer.parseInt(args[2]);
                     z = Integer.parseInt(args[3]);
                 } catch (NumberFormatException e) {
-                    player.sendMessage("Координаты должны быть числами.");
-                    return false;
+                    player.sendMessage("§4Координаты должны быть числами.");
+                    return true;
                 }
             } else if (args.length != 1) {
-                player.sendMessage("Используйте: /goto <world> [x] [y] [z]");
-                return false;
+                player.sendMessage("Использование: /goto §d<world> §c[x] §a[y] §3[z]");
+                return true;
             }
 
             // Проверяем, существует ли мир
@@ -42,8 +42,8 @@ public class TeleportCommand implements CommandExecutor {
                 player.teleport(new Location(plugin.getServer().getWorld(worldName), x, y, z));
                 // Сообщение о телепортации не выводим
             } else {
-                player.sendMessage("Мир не найден.");
-                return false;
+                player.sendMessage("§4Мир не найден.");
+                return true;
             }
 
             return true;

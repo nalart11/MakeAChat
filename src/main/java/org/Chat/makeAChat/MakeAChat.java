@@ -13,15 +13,20 @@
     import net.luckperms.api.LuckPermsProvider;
     import net.luckperms.api.model.user.User;
 
+    import java.util.HashMap;
+
     public class MakeAChat extends JavaPlugin implements Listener {
 
         private final MiniMessage miniMessage = MiniMessage.miniMessage(); // Инициализация MiniMessage
+        private final HashMap<Player, Player> lastMessaged = new HashMap<>(); // Отслеживание последних отправителей
 
         @Override
         public void onEnable() {
               // Регистрируем событие чата
             getServer().getPluginManager().registerEvents(this, this);
             this.getCommand("goto").setExecutor(new TeleportCommand(this));
+            this.getCommand("msg").setExecutor(new MessageCommand(this));
+            this.getCommand("r").setExecutor(new ReplyCommand(this));
             getLogger().info("MakeAChat плагин активирован!");
         }
 
@@ -30,8 +35,18 @@
             getLogger().info("MakeAChat плагин деактивирован.");
         }
 
+        // Метод для обновления последнего отправителя сообщения
+        public void setLastMessaged(Player sender, Player recipient) {
+            lastMessaged.put(recipient, sender);
+        }
+
+        // Метод для получения последнего отправителя
+        public Player getLastMessaged(Player player) {
+            return lastMessaged.get(player);
+        }
+
         // Получаем префикс игрока из LuckPerms
-        private String getPlayerPrefix(Player player) {
+        public String getPlayerPrefix(Player player) {
             User user = LuckPermsProvider.get().getUserManager().getUser(player.getUniqueId());
             if (user != null) {
                 String prefix = user.getCachedData().getMetaData().getPrefix();
@@ -43,7 +58,7 @@
         }
 
         // Получаем суффикс игрока из LuckPerms
-        private String getPlayerSuffix(Player player) {
+        public String getPlayerSuffix(Player player) {
             User user = LuckPermsProvider.get().getUserManager().getUser(player.getUniqueId());
             if (user != null) {
                 String suffix = user.getCachedData().getMetaData().getSuffix();

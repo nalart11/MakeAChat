@@ -6,3 +6,9 @@ commands:
   goto:
     description: Телепортация игрока к заданным координатам
     usage: /goto <world> <x> <y> <z>
+  msg:
+    description: Отправить личное сообщение игроку.
+    usage: /msg <игрок> <сообщение>
+  r:
+    description: Ответить на последнее сообщение
+    usage: /r <сообщение>
