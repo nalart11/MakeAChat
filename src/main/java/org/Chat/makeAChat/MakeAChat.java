@@ -68,7 +68,7 @@ public class MakeAChat extends JavaPlugin implements Listener {
     }
 
     public Sound getPlayerSound(Player player) {
-        return playerSounds.getOrDefault(player, Sound.ENTITY_PLAYER_LEVELUP); // Return a default sound if none is set
+        return playerSounds.getOrDefault(player, Sound.BLOCK_NOTE_BLOCK_BELL); // Return a default sound if none is set
     }
 
 
