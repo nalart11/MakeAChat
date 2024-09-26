@@ -12,10 +12,18 @@ commands:
     usage: /msg <игрок> <сообщение>
     permission: MakeAChat.message
   r:
-    description: Ответить на последнее сообщение
+    description: Ответить на последнее сообщение.
     usage: /r <сообщение>
     permission: MakeAChat.reply
+  msgs:
+    description: Изменение звука сообщений.
+    usage: /msgs <звук>
+    permission: MakeAChat.message_sound
   rename:
     description: Изменяет название предмета в руке.
     usage: /rename <новое_название>
     permission: MakeAChat.rename
+  enchant:
+    description: Добавляет зачарования предмету в руке.
+    usage: /enchsnt <зачарование> <уровень>
+    permission: MakeAChat.enchant

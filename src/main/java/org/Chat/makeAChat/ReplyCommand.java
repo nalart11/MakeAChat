@@ -71,8 +71,11 @@ public class ReplyCommand implements CommandExecutor {
         target.sendMessage(parsedMessage);
         playerSender.sendMessage(parsedMessage);
 
-        // Воспроизводим звук мяукания кошки для получателя
-        target.playSound(target.getLocation(), Sound.ENTITY_CAT_AMBIENT, 1.0F, 1.0F);
+        // Получаем выбранный игроком звук
+        Sound selectedSound = plugin.getPlayerSound(target);
+
+        // Воспроизводим выбранный игроком звук
+        target.playSound(target.getLocation(), selectedSound, 1.0F, 1.0F);
 
         // Обновляем последнего собеседника для команды /r
         plugin.setLastMessaged(playerSender, target);

@@ -3,10 +3,15 @@ package org.Chat.makeAChat;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.plugin.java.JavaPlugin;
+import java.util.ArrayList;
+import java.util.List;
 
-public class TeleportCommand implements CommandExecutor {
+public class TeleportCommand implements CommandExecutor, TabCompleter {
     private final MakeAChat plugin; // Ссылка на экземпляр плагина
 
     public TeleportCommand(MakeAChat plugin) {
@@ -38,9 +43,10 @@ public class TeleportCommand implements CommandExecutor {
             }
 
             // Проверяем, существует ли мир
-            if (plugin.getServer().getWorld(worldName) != null) {
-                player.teleport(new Location(plugin.getServer().getWorld(worldName), x, y, z));
-                // Сообщение о телепортации не выводим
+            World world = plugin.getServer().getWorld(worldName);
+            if (world != null) {
+                player.teleport(new Location(world, x, y, z));
+                player.sendMessage("§aВы были телепортированы в мир " + worldName);
             } else {
                 player.sendMessage("§4Мир не найден.");
                 return true;
@@ -49,5 +55,18 @@ public class TeleportCommand implements CommandExecutor {
             return true;
         }
         return false;
+    }
+
+    // Метод для автодополнения миров
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length == 1) {
+            List<String> worldNames = new ArrayList<>();
+            for (World world : plugin.getServer().getWorlds()) {
+                worldNames.add(world.getName()); // Добавляем имена всех доступных миров
+            }
+            return worldNames; // Возвращаем список миров для автодополнения
+        }
+        return null; // Если мы не находимся на первом аргументе, не возвращаем ничего
     }
 }

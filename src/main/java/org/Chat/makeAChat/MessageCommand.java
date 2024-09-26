@@ -3,13 +3,19 @@ package org.Chat.makeAChat;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.Sound;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class MessageCommand implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.List;
+
+public class MessageCommand implements CommandExecutor, TabCompleter {
 
     private final MiniMessage miniMessage = MiniMessage.miniMessage(); // Инициализация MiniMessage
     private final MakeAChat plugin;
@@ -61,12 +67,33 @@ public class MessageCommand implements CommandExecutor {
         target.sendMessage(parsedMessage);
         playerSender.sendMessage(parsedMessage);
 
-        // Воспроизводим звук мяукания кошки для получателя
-        target.playSound(target.getLocation(), Sound.ENTITY_CAT_AMBIENT, 1.0F, 1.0F);
+        // Получаем выбранный игроком звук
+        Sound selectedSound = plugin.getPlayerSound(target);
+
+        // Воспроизводим выбранный игроком звук
+        target.playSound(target.getLocation(), selectedSound, 1.0F, 1.0F);
 
         // Обновляем последнего собеседника для команды /r
         plugin.setLastMessaged(playerSender, target);
 
         return true;
+    }
+
+    // Реализация автодополнения для команды /msg
+    @Nullable
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        List<String> suggestions = new ArrayList<>();
+
+        if (args.length == 1) {
+            String partialName = args[0].toLowerCase();
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (player.getName().toLowerCase().startsWith(partialName)) {
+                    suggestions.add(player.getName());
+                }
+            }
+        }
+
+        return suggestions;
     }
 }

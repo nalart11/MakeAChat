@@ -12,6 +12,7 @@
     import org.bukkit.plugin.java.JavaPlugin;
     import net.luckperms.api.LuckPermsProvider;
     import net.luckperms.api.model.user.User;
+    import org.bukkit.Sound;
 
     import java.util.HashMap;
 
@@ -19,6 +20,7 @@
 
         private final MiniMessage miniMessage = MiniMessage.miniMessage(); // Инициализация MiniMessage
         private final HashMap<Player, Player> lastMessaged = new HashMap<>(); // Отслеживание последних отправителей
+        private final HashMap<Player, Sound> playerSounds = new HashMap<>();
 
         @Override
         public void onEnable() {
@@ -27,7 +29,9 @@
             this.getCommand("goto").setExecutor(new TeleportCommand(this));
             this.getCommand("msg").setExecutor(new MessageCommand(this));
             this.getCommand("r").setExecutor(new ReplyCommand(this));
+            this.getCommand("msgs").setExecutor(new MessageSoundCommand(this));
             this.getCommand("rename").setExecutor(new RenameCommand());
+            this.getCommand("enchant").setExecutor(new EnchantCommand());
             getLogger().info("MakeAChat плагин активирован!");
         }
 
@@ -44,6 +48,15 @@
         // Метод для получения последнего отправителя
         public Player getLastMessaged(Player player) {
             return lastMessaged.get(player);
+        }
+
+        public void setPlayerSound(Player player, Sound sound) {
+            playerSounds.put(player, sound);
+        }
+
+        // Метод для получения звука для игрока
+        public Sound getPlayerSound(Player player) {
+            return playerSounds.getOrDefault(player, Sound.ENTITY_CAT_AMBIENT);  // По умолчанию звук кота
         }
 
         // Получаем префикс игрока из LuckPerms
