@@ -25,6 +25,10 @@ public class MessageSoundCommand implements CommandExecutor, TabCompleter {
         soundMap.put("anvil.land", Sound.BLOCK_ANVIL_LAND);
         soundMap.put("noteblock.bell", Sound.BLOCK_NOTE_BLOCK_BELL);
         soundMap.put("noteblock.chime", Sound.BLOCK_NOTE_BLOCK_CHIME);
+        soundMap.put("noteblock.xylophone", Sound.BLOCK_NOTE_BLOCK_XYLOPHONE);
+        soundMap.put("noteblock.cow_bell", Sound.BLOCK_NOTE_BLOCK_COW_BELL);
+        soundMap.put("wolf.ambient", Sound.ENTITY_WOLF_AMBIENT);
+        soundMap.put("villager.trade", Sound.ENTITY_VILLAGER_TRADE);
     }
 
     @Override
@@ -37,7 +41,7 @@ public class MessageSoundCommand implements CommandExecutor, TabCompleter {
         Player player = (Player) sender;
 
         if (args.length != 1) {
-            player.sendMessage("Использование: /msgs <sound>");
+            player.sendMessage("Использование: /msgs <звук>");
             return true;
         }
 
