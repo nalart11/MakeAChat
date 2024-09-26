@@ -27,6 +27,7 @@
             this.getCommand("goto").setExecutor(new TeleportCommand(this));
             this.getCommand("msg").setExecutor(new MessageCommand(this));
             this.getCommand("r").setExecutor(new ReplyCommand(this));
+            this.getCommand("rename").setExecutor(new RenameCommand());
             getLogger().info("MakeAChat плагин активирован!");
         }
 

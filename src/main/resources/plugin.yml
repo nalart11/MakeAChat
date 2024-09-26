@@ -6,9 +6,16 @@ commands:
   goto:
     description: Телепортация игрока к заданным координатам
     usage: /goto <world> <x> <y> <z>
+    permission: MakeAChat.goto
   msg:
     description: Отправить личное сообщение игроку.
     usage: /msg <игрок> <сообщение>
+    permission: MakeAChat.message
   r:
     description: Ответить на последнее сообщение
     usage: /r <сообщение>
+    permission: MakeAChat.reply
+  rename:
+    description: Изменяет название предмета в руке.
+    usage: /rename <новое_название>
+    permission: MakeAChat.rename
