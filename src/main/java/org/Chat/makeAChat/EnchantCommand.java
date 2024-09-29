@@ -19,7 +19,7 @@ import java.util.List;
 public class EnchantCommand implements CommandExecutor, TabCompleter {
 
     private final MakeAChat plugin;
-    private final MiniMessage miniMessage = MiniMessage.miniMessage(); // Инициализация MiniMessage
+    private final MiniMessage miniMessage = MiniMessage.miniMessage();
 
     public EnchantCommand(MakeAChat plugin) {
         this.plugin = plugin;
@@ -69,7 +69,7 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
         String enchantmentMessage = String.format("Зачарование <green>%s</green> с уровнем <gold>%d</gold> наложено на <aqua>%s</aqua> игроку %s%s%s.",
                 enchantment.getKey().getKey(),
                 level,
-                miniMessage.serialize(displayName), // Преобразуем displayName в строку
+                miniMessage.serialize(displayName),
                 prefix,
                 target.getName(),
                 suffix
@@ -89,7 +89,6 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
-            // Возвращаем список онлайн игроков для автодополнения
             List<String> playerNames = new ArrayList<>();
             for (Player player : Bukkit.getOnlinePlayers()) {
                 playerNames.add(player.getName());
@@ -98,7 +97,6 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length == 2) {
-            // Возвращаем список зачарований для автодополнения
             List<String> enchantments = new ArrayList<>();
             for (Enchantment enchantment : Enchantment.values()) {
                 enchantments.add(enchantment.getKey().getKey());
@@ -106,6 +104,6 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
             return enchantments;
         }
 
-        return Arrays.asList(); // Возвращаем пустой список на остальные случаи
+        return Arrays.asList();
     }
 }

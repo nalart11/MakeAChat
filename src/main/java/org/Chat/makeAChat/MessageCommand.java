@@ -17,7 +17,7 @@ import java.util.List;
 
 public class MessageCommand implements CommandExecutor, TabCompleter {
 
-    private final MiniMessage miniMessage = MiniMessage.miniMessage(); // Инициализация MiniMessage
+    private final MiniMessage miniMessage = MiniMessage.miniMessage();
     private final MakeAChat plugin;
 
     public MessageCommand(MakeAChat plugin) {
@@ -44,42 +44,33 @@ public class MessageCommand implements CommandExecutor, TabCompleter {
 
         Player playerSender = (Player) sender;
 
-        // Получаем префиксы и суффиксы
         String senderPrefix = plugin.getPlayerPrefix(playerSender);
         String senderSuffix = plugin.getPlayerSuffix(playerSender);
         String targetPrefix = plugin.getPlayerPrefix(target);
         String targetSuffix = plugin.getPlayerSuffix(target);
 
-        // Собираем сообщение
         StringBuilder message = new StringBuilder();
         for (int i = 1; i < args.length; i++) {
             message.append(args[i]).append(" ");
         }
 
-        // Форматируем сообщение с использованием MiniMessage
         String formattedMessage = senderPrefix + playerSender.getName() + senderSuffix + " <yellow>→</yellow> "
                 + targetPrefix + target.getName() + targetSuffix + ": <gray>" + message.toString().trim() + "</gray>";
 
-        // Парсим сообщение в Component
         Component parsedMessage = miniMessage.deserialize(formattedMessage);
 
-        // Отправляем сообщение
         target.sendMessage(parsedMessage);
         playerSender.sendMessage(parsedMessage);
 
-        // Получаем выбранный игроком звук
         Sound selectedSound = plugin.getPlayerSound(target);
 
-        // Воспроизводим выбранный игроком звук
         target.playSound(target.getLocation(), selectedSound, 1.0F, 1.0F);
 
-        // Обновляем последнего собеседника для команды /r
         plugin.setLastMessaged(playerSender, target);
 
         return true;
     }
 
-    // Реализация автодополнения для команды /msg
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {

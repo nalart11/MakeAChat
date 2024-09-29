@@ -2,7 +2,6 @@ package org.Chat.makeAChat;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -31,7 +30,6 @@ public class RenameCommand implements CommandExecutor, TabCompleter {
 
         Player player = (Player) sender;
 
-        // Проверяем, есть ли предмет в руке
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item == null || item.getType() == Material.AIR) {
             player.sendMessage(ChatColor.RED + "У вас в руке должен быть предмет.");
@@ -40,7 +38,6 @@ public class RenameCommand implements CommandExecutor, TabCompleter {
 
         ItemMeta meta = item.getItemMeta();
 
-        // Обработка команды для изменения названия
         if (args.length > 1 && args[0].equalsIgnoreCase("name")) {
             StringBuilder newName = new StringBuilder();
             for (int i = 1; i < args.length; i++) {
@@ -51,13 +48,11 @@ public class RenameCommand implements CommandExecutor, TabCompleter {
             meta.displayName(parsedName);
             item.setItemMeta(meta);
 
-            // Выводим сообщение с новым названием и предметом
             player.sendMessage(Component.text(ChatColor.GREEN + "Название предмета изменено на: ").append(item.displayName()));
 
             return true;
         }
 
-        // Обработка команды для изменения лора
         if (args.length > 2 && args[0].equalsIgnoreCase("lore")) {
             int lineIndex;
             try {
@@ -86,7 +81,6 @@ public class RenameCommand implements CommandExecutor, TabCompleter {
             meta.lore(lore);
             item.setItemMeta(meta);
 
-            // Выводим сообщение с изменённой строкой лора и предметом
             player.sendMessage(Component.text(ChatColor.GREEN + "Лор предмета изменён на: ").append(item.displayName()));
 
             return true;

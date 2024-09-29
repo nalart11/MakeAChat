@@ -1,32 +1,28 @@
 package org.Chat.makeAChat;
 
-import org.Chat.makeAChat.TeleportCommand;
-
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.model.user.User;
+import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import net.kyori.adventure.text.event.ClickEvent;
-import org.bukkit.plugin.java.JavaPlugin;
-import net.luckperms.api.LuckPermsProvider;
-import net.luckperms.api.model.user.User;
-import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
-import java.io.File;
-import java.io.IOException;
 
 public class MakeAChat extends JavaPlugin implements Listener {
 
-    private final MiniMessage miniMessage = MiniMessage.miniMessage(); // Инициализация MiniMessage
-    private final HashMap<Player, Player> lastMessaged = new HashMap<>(); // Отслеживание последних отправителей
+    private final MiniMessage miniMessage = MiniMessage.miniMessage();
+    private final HashMap<Player, Player> lastMessaged = new HashMap<>();
     private final HashMap<Player, Sound> playerSounds = new HashMap<>();
+    private HashMap<Player, Location> lastLocation = new HashMap<>();
 
     private FileConfiguration config;
 
@@ -37,6 +33,7 @@ public class MakeAChat extends JavaPlugin implements Listener {
         // Регистрируем событие чата
         getServer().getPluginManager().registerEvents(this, this);
         this.getCommand("goto").setExecutor(new TeleportCommand(this));
+        this.getCommand("back").setExecutor(new BackCommand(this));
         this.getCommand("msg").setExecutor(new MessageCommand(this));
         this.getCommand("r").setExecutor(new ReplyCommand(this));
         this.getCommand("msgs").setExecutor(new MessageSoundCommand(this));
@@ -62,13 +59,22 @@ public class MakeAChat extends JavaPlugin implements Listener {
         savePlayerSound(player);
     }
 
+    public void setLastLocation(Player player, Location location) {
+        lastLocation.put(player, location);
+    }
+
+    public Location getLastLocation(Player player) {
+        return lastLocation.get(player);
+    }
+
+
     public void setPlayerSound(Player player, Sound sound) {
         playerSounds.put(player, sound);
-        savePlayerSound(player);  // Сохраняем звук при его установке
+        savePlayerSound(player);
     }
 
     public Sound getPlayerSound(Player player) {
-        return playerSounds.getOrDefault(player, Sound.BLOCK_NOTE_BLOCK_BELL); // Return a default sound if none is set
+        return playerSounds.getOrDefault(player, Sound.BLOCK_NOTE_BLOCK_BELL);
     }
 
 
@@ -88,17 +94,14 @@ public class MakeAChat extends JavaPlugin implements Listener {
         }
     }
 
-    // Метод для обновления последнего отправителя сообщения
     public void setLastMessaged(Player sender, Player recipient) {
         lastMessaged.put(recipient, sender);
     }
 
-    // Метод для получения последнего отправителя
     public Player getLastMessaged(Player player) {
         return lastMessaged.get(player);
     }
 
-    // Получаем префикс игрока из LuckPerms
     public String getPlayerPrefix(Player player) {
         User user = LuckPermsProvider.get().getUserManager().getUser(player.getUniqueId());
         if (user != null) {
@@ -110,7 +113,6 @@ public class MakeAChat extends JavaPlugin implements Listener {
         return "";
     }
 
-    // Получаем суффикс игрока из LuckPerms
     public String getPlayerSuffix(Player player) {
         User user = LuckPermsProvider.get().getUserManager().getUser(player.getUniqueId());
         if (user != null) {
@@ -124,22 +126,17 @@ public class MakeAChat extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        // Получаем игрока и его сообщение
         Player player = event.getPlayer();
         String playerName = player.getDisplayName();
         String message = event.getMessage();
 
-        // Проверяем, есть ли в сообщении маркер ":loc:"
         if (message.contains(":loc:")) {
-            // Получаем координаты игрока
             int x = player.getLocation().getBlockX();
             int y = player.getLocation().getBlockY();
             int z = player.getLocation().getBlockZ();
 
-            // Получаем название мира
             String worldName = player.getWorld().getName();
 
-            // Определяем цвет в зависимости от мира
             String color;
             switch (worldName) {
                 case "world":
@@ -152,33 +149,26 @@ public class MakeAChat extends JavaPlugin implements Listener {
                     color = "<light_purple>";
                     break;
                 default:
-                    color = "<white>"; // Цвет по умолчанию
+                    color = "<white>";
             }
 
-            // Форматируем строку с координатами и измерением
             String location = color + "<click:run_command:'/goto " + worldName + " " + x + " " + y + " " + z + "'>["
                     + x + "x/" + y + "y/" + z + "z, " + worldName + "]</click><reset>";
 
-            // Заменяем ":loc:" на кликабельный текст с координатами игрока
             message = message.replace(":loc:", location);
         }
 
-        // Получаем префикс и суффикс игрока
         String prefix = getPlayerPrefix(player);
         String suffix = getPlayerSuffix(player);
 
-        // Форматируем сообщение, включая префикс, суффикс и текст игрока
         String formattedMessage = prefix + playerName + suffix + " > " + message;
 
-        // Парсим MiniMessage в Component
         Component parsedMessage = miniMessage.deserialize(formattedMessage);
 
-        // Отправляем сообщение всем игрокам
         for (Player onlinePlayer : getServer().getOnlinePlayers()) {
             onlinePlayer.sendMessage(parsedMessage);
         }
 
-        // Отменяем оригинальный формат чата
         event.setCancelled(true);
     }
 }

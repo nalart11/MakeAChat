@@ -4,21 +4,22 @@ version: 0.1-TEST
 api-version: 1.21
 commands:
   goto:
-    description: Телепортация игрока к заданным координатам
+    description: Телепортация игрока к заданным координатам.
     usage: /goto <world> <x> <y> <z>
     permission: MakeAChat.goto
+  back:
+    description: Возвращение игрока.
+    usage: /back
+    permission: MakeAChat.back
   msg:
     description: Отправить личное сообщение игроку.
     usage: /msg <игрок> <сообщение>
-    permission: MakeAChat.message
   r:
     description: Ответить на последнее сообщение.
     usage: /r <сообщение>
-    permission: MakeAChat.reply
   msgs:
     description: Изменение звука сообщений.
     usage: /msgs <звук>
-    permission: MakeAChat.message_sound
   rename:
     description: Изменяет название предмета в руке.
     usage: /rename <новое_название>

@@ -20,7 +20,6 @@ public class MessageSoundCommand implements CommandExecutor, TabCompleter {
     public MessageSoundCommand(MakeAChat plugin) {
         this.plugin = plugin;
 
-        // Сопоставление сокращённых названий звуков с полными идентификаторами
         soundMap.put("cat.ambient", Sound.ENTITY_CAT_AMBIENT);
         soundMap.put("anvil.land", Sound.BLOCK_ANVIL_LAND);
         soundMap.put("noteblock.bell", Sound.BLOCK_NOTE_BLOCK_BELL);
@@ -45,16 +44,13 @@ public class MessageSoundCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        // Получаем введённый сокращённый звук
         String soundKey = args[0].toLowerCase();
 
-        // Проверяем, существует ли введённый звук в нашем маппинге
         if (!soundMap.containsKey(soundKey)) {
             player.sendMessage("Недопустимый звук. Введите один из доступных звуков.");
             return true;
         }
 
-        // Устанавливаем звук для игрока
         Sound selectedSound = soundMap.get(soundKey);
         plugin.setPlayerSound(player, selectedSound);
         player.sendMessage("Звук уведомлений изменён на: " + soundKey);
